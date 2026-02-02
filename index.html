@@ -1,76 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Be My Valentine 💘</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       height: 100vh;
-      background: radial-gradient(circle, #ffd1dc, #ff5f9e);
+      background: radial-gradient(circle at top, #ffd1dc, #ff5f9e);
       font-family: 'Comic Sans MS', cursive;
       overflow: hidden;
     }
 
+    /* TOP CONTENT */
     .container {
-      position: absolute;
-      top: 15%;
+      position: relative;
+      top: 12%;
       width: 100%;
       text-align: center;
       color: #b30059;
+      padding: 0 16px;
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: clamp(2rem, 6vw, 3rem);
       margin-bottom: 30px;
       text-shadow: 0 0 10px #fff;
     }
 
     #yesBtn {
-      padding: 15px 40px;
-      font-size: 1.3rem;
-      border-radius: 30px;
+      padding: 15px 42px;
+      font-size: 1.2rem;
+      border-radius: 40px;
       border: none;
-      background: #ff165d;
+      background: linear-gradient(135deg, #ff165d, #ff4d6d);
       color: white;
       cursor: pointer;
-      box-shadow: 0 0 15px #ff165d;
-      transition: transform 0.2s;
+      box-shadow: 0 0 18px #ff165d;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     #yesBtn:hover {
-      transform: scale(1.1);
+      transform: scale(1.08);
+      box-shadow: 0 0 28px #ff165d;
     }
 
-    /* NO BUTTON WRAPPER */
+    /* NO BUTTON + TEXT (ONE UNIT) */
     .no-wrapper {
       position: absolute;
-      left: 50%;
-      top: 55%;
-      transform: translate(-50%, -50%);
+      width: 220px;
       text-align: center;
-      transition: all 0.3s ease;
+      left: 50%;
+      top: 60%;
+      transform: translate(-50%, -50%);
+      transition: transform 0.35s ease;
     }
 
     #dynamicText {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin-bottom: 8px;
       color: #fff;
       text-shadow: 0 0 10px #ff0055;
-      min-height: 24px;
+      min-height: 26px;
       animation: pop 0.3s ease;
     }
 
     #noBtn {
-      padding: 15px 35px;
-      font-size: 1.2rem;
-      border-radius: 30px;
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+      border-radius: 40px;
       border: none;
       background: white;
       color: #ff0055;
       cursor: pointer;
-      box-shadow: 0 0 10px #fff;
+      box-shadow: 0 0 14px #fff;
     }
 
     @keyframes pop {
@@ -78,17 +88,17 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
-    /* FLOATING HEARTS */
-    .heart {
+    /* SPARKLES (SUBTLE & LOVABLE) */
+    .sparkle {
       position: absolute;
-      color: rgba(255,255,255,0.7);
-      font-size: 20px;
-      animation: floatUp 6s linear infinite;
+      font-size: 14px;
+      animation: sparkleUp 1.8s ease-out forwards;
+      pointer-events: none;
     }
 
-    @keyframes floatUp {
-      0% { transform: translateY(100vh); opacity: 1; }
-      100% { transform: translateY(-10vh); opacity: 0; }
+    @keyframes sparkleUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-50px) scale(1.6); opacity: 0; }
     }
   </style>
 </head>
@@ -101,7 +111,7 @@
   </div>
 
   <div class="no-wrapper" id="noWrapper">
-    <div id="dynamicText"></div>
+    <div id="dynamicText">Hey! Don’t do this 😳</div>
     <button id="noBtn" onclick="moveNo()">No 💔</button>
   </div>
 
@@ -112,51 +122,71 @@
       "You can’t escape love 💘",
       "Almost clicked Yes 😉",
       "Think again ❤️",
-      "Love is chasing you 🏃‍♀️💞",
+      "Love is pulling you closer 💞",
       "Just say Yes already 😭"
     ];
 
+    const wrapper = document.getElementById("noWrapper");
+    const text = document.getElementById("dynamicText");
+    const yesBtn = document.getElementById("yesBtn");
+
+    let attempts = 0;
+
     function moveNo() {
-      const wrapper = document.getElementById("noWrapper");
-      const text = document.getElementById("dynamicText");
+      attempts++;
 
-      const maxX = window.innerWidth - 200;
-      const maxY = window.innerHeight - 150;
+      const padding = 16;
+      const wrapperWidth = 220;
+      const wrapperHeight = 90;
 
-      const randomX = Math.random() * maxX;
-      const randomY = Math.random() * maxY;
+      const maxX = window.innerWidth - wrapperWidth - padding;
+      const maxY = window.innerHeight - wrapperHeight - padding;
 
-      wrapper.style.left = randomX + "px";
-      wrapper.style.top = randomY + "px";
+      let x = Math.random() * maxX + padding;
+      let y = Math.random() * maxY + padding;
+
+      // After few tries, love pulls it closer to YES
+      if (attempts > 2) {
+        const yesRect = yesBtn.getBoundingClientRect();
+        const targetX = yesRect.left + yesRect.width / 2 - wrapperWidth / 2;
+        const targetY = yesRect.top + yesRect.height + 20;
+        x = (x + targetX) / 2;
+        y = (y + targetY) / 2;
+      }
+
+      wrapper.style.transform = `translate(${x}px, ${y}px)`;
 
       text.innerText = messages[Math.floor(Math.random() * messages.length)];
+
       text.style.animation = "none";
       text.offsetHeight;
       text.style.animation = "pop 0.3s ease";
+
+      createSparkles(x + wrapperWidth / 2, y);
+    }
+
+    function createSparkles(x, y) {
+      for (let i = 0; i < 4; i++) {
+        const s = document.createElement("div");
+        s.className = "sparkle";
+        s.innerText = "✨";
+        s.style.left = x + Math.random() * 30 - 15 + "px";
+        s.style.top = y + "px";
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 1800);
+      }
     }
 
     function yesClicked() {
       document.body.innerHTML = `
         <div style="height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;color:white;">
           <div>
-            <h1>You said YES! 💍💖</h1>
-            <h2>My Valentine is officially locked ❤️</h2>
+            <h1 style="font-size:3rem;">Yay! 💍💖</h1>
+            <h2>You chose love ❤️</h2>
           </div>
         </div>
       `;
     }
-
-    /* Generate floating hearts */
-    setInterval(() => {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.innerText = "💖";
-      heart.style.left = Math.random() * window.innerWidth + "px";
-      heart.style.fontSize = (15 + Math.random() * 20) + "px";
-      document.body.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 6000);
-    }, 500);
   </script>
 
 </body>
