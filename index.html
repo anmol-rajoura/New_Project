@@ -2,104 +2,161 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Be My Valentine 💖</title>
+  <title>Be My Valentine 💘</title>
 
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background: linear-gradient(135deg, #ffafbd, #ffc3a0);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: radial-gradient(circle, #ffd1dc, #ff5f9e);
       font-family: 'Comic Sans MS', cursive;
       overflow: hidden;
     }
 
     .container {
+      position: absolute;
+      top: 15%;
+      width: 100%;
       text-align: center;
       color: #b30059;
     }
 
     h1 {
       font-size: 3rem;
-      margin-bottom: 10px;
-    }
-
-    #dynamicText {
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-      min-height: 30px;
-    }
-
-    button {
-      padding: 15px 35px;
-      font-size: 1.2rem;
-      border-radius: 30px;
-      border: none;
-      cursor: pointer;
-      transition: 0.2s;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #fff;
     }
 
     #yesBtn {
-      background: #ff4d6d;
+      padding: 15px 40px;
+      font-size: 1.3rem;
+      border-radius: 30px;
+      border: none;
+      background: #ff165d;
       color: white;
-      margin-right: 20px;
-    }
-
-    #noBtn {
-      background: #fff;
-      color: #ff4d6d;
-      position: absolute;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff165d;
+      transition: transform 0.2s;
     }
 
     #yesBtn:hover {
       transform: scale(1.1);
     }
+
+    /* NO BUTTON WRAPPER */
+    .no-wrapper {
+      position: absolute;
+      left: 50%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    #dynamicText {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: #fff;
+      text-shadow: 0 0 10px #ff0055;
+      min-height: 24px;
+      animation: pop 0.3s ease;
+    }
+
+    #noBtn {
+      padding: 15px 35px;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      border: none;
+      background: white;
+      color: #ff0055;
+      cursor: pointer;
+      box-shadow: 0 0 10px #fff;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* FLOATING HEARTS */
+    .heart {
+      position: absolute;
+      color: rgba(255,255,255,0.7);
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh); opacity: 1; }
+      100% { transform: translateY(-10vh); opacity: 0; }
+    }
   </style>
 </head>
+
 <body>
 
   <div class="container">
-    <h1>Will you be my Valentine? 💘</h1>
+    <h1>Will you be my Valentine? 💖</h1>
+    <button id="yesBtn" onclick="yesClicked()">Yes 💘</button>
+  </div>
+
+  <div class="no-wrapper" id="noWrapper">
     <div id="dynamicText"></div>
-    <button id="yesBtn" onclick="yesClicked()">Yes 💖</button>
     <button id="noBtn" onclick="moveNo()">No 💔</button>
   </div>
 
   <script>
     const messages = [
-      "Are you sure? 🥺",
-      "Think again! 💭",
-      "My heart will break 💔",
-      "Give love a chance 💘",
-      "Pleaseee 😭",
-      "Don’t be so cold 🥶",
-      "Love is just one click away ❤️"
+      "Hey! Don’t do this 😳",
+      "That was close 😅",
+      "You can’t escape love 💘",
+      "Almost clicked Yes 😉",
+      "Think again ❤️",
+      "Love is chasing you 🏃‍♀️💞",
+      "Just say Yes already 😭"
     ];
 
     function moveNo() {
-      const noBtn = document.getElementById("noBtn");
+      const wrapper = document.getElementById("noWrapper");
       const text = document.getElementById("dynamicText");
 
-      const randomX = Math.random() * (window.innerWidth - 100);
-      const randomY = Math.random() * (window.innerHeight - 50);
+      const maxX = window.innerWidth - 200;
+      const maxY = window.innerHeight - 150;
 
-      noBtn.style.left = randomX + "px";
-      noBtn.style.top = randomY + "px";
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
 
-      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-      text.innerText = randomMessage;
+      wrapper.style.left = randomX + "px";
+      wrapper.style.top = randomY + "px";
+
+      text.innerText = messages[Math.floor(Math.random() * messages.length)];
+      text.style.animation = "none";
+      text.offsetHeight;
+      text.style.animation = "pop 0.3s ease";
     }
 
     function yesClicked() {
       document.body.innerHTML = `
-        <div style="text-align:center; color:#b30059;">
-          <h1>Yayyyy! 💖🥰</h1>
-          <h2>You just made my Valentine perfect ❤️</h2>
+        <div style="height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;color:white;">
+          <div>
+            <h1>You said YES! 💍💖</h1>
+            <h2>My Valentine is officially locked ❤️</h2>
+          </div>
         </div>
       `;
     }
+
+    /* Generate floating hearts */
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "💖";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.fontSize = (15 + Math.random() * 20) + "px";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 6000);
+    }, 500);
   </script>
 
 </body>
