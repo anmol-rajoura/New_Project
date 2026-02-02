@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Be My Valentine 💖</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Comic Sans MS', cursive;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      color: #b30059;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    #dynamicText {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      min-height: 30px;
+    }
+
+    button {
+      padding: 15px 35px;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      margin-right: 20px;
+    }
+
+    #noBtn {
+      background: #fff;
+      color: #ff4d6d;
+      position: absolute;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Will you be my Valentine? 💘</h1>
+    <div id="dynamicText"></div>
+    <button id="yesBtn" onclick="yesClicked()">Yes 💖</button>
+    <button id="noBtn" onclick="moveNo()">No 💔</button>
+  </div>
+
+  <script>
+    const messages = [
+      "Are you sure? 🥺",
+      "Think again! 💭",
+      "My heart will break 💔",
+      "Give love a chance 💘",
+      "Pleaseee 😭",
+      "Don’t be so cold 🥶",
+      "Love is just one click away ❤️"
+    ];
+
+    function moveNo() {
+      const noBtn = document.getElementById("noBtn");
+      const text = document.getElementById("dynamicText");
+
+      const randomX = Math.random() * (window.innerWidth - 100);
+      const randomY = Math.random() * (window.innerHeight - 50);
+
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+      text.innerText = randomMessage;
+    }
+
+    function yesClicked() {
+      document.body.innerHTML = `
+        <div style="text-align:center; color:#b30059;">
+          <h1>Yayyyy! 💖🥰</h1>
+          <h2>You just made my Valentine perfect ❤️</h2>
+        </div>
+      `;
+    }
+  </script>
+
+</body>
+</html>
